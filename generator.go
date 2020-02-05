@@ -1,11 +1,5 @@
 package generator
 
-import (
-	"io/ioutil"
-	"os"
-	"text/template"
-)
-
 type Package struct {
 	Name      string
 	Imports   []string
