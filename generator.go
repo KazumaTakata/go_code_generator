@@ -68,7 +68,7 @@ func main() {
 	new_struct := Struct{Name: "Node", Elements: []StructElement{StructElement{Name: "Id", Type: "string"}, StructElement{Name: "T", Type: "*T"}}}
 	package_temp.Structs = append(package_temp.Structs, new_struct)
 
-	buf, _ := ioutil.ReadFile("../sample.tmpl")
+	buf, _ := ioutil.ReadFile("sample.tmpl")
 
 	tmpl, err := template.New("package").Parse(string(buf))
 	if err != nil {
