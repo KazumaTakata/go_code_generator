@@ -1,4 +1,4 @@
-package main
+package generator
 
 import (
 	"io/ioutil"
@@ -8,6 +8,7 @@ import (
 
 type Package struct {
 	Name      string
+	Imports   []string
 	Functions []Function
 	Structs   []Struct
 }
@@ -45,7 +46,12 @@ type BooleanExpression struct {
 
 type FunctionCall struct {
 	Name string
-	Args []string
+	Args []Args
+}
+
+type Args struct {
+	IsString bool
+	Value    string
 }
 
 type Struct struct {
@@ -56,27 +62,4 @@ type Struct struct {
 type StructElement struct {
 	Name string
 	Type string
-}
-
-func main() {
-
-	package_temp := Package{Name: "main", Functions: []Function{}}
-	mainfunc_statement := Statement{AssignStatement: "i := 0"}
-	mainfunc_ifstatement := Statement{IfStatement: &IfStatement{BoolExpression: &BooleanExpression{Left: "i", Right: "0"}, Body: []Statement{mainfunc_statement}}}
-	mainfunc := Function{Name: "main", Reciever: "(s S)", Statements: []Statement{mainfunc_statement, mainfunc_ifstatement}}
-	package_temp.Functions = append(package_temp.Functions, mainfunc)
-	new_struct := Struct{Name: "Node", Elements: []StructElement{StructElement{Name: "Id", Type: "string"}, StructElement{Name: "T", Type: "*T"}}}
-	package_temp.Structs = append(package_temp.Structs, new_struct)
-
-	buf, _ := ioutil.ReadFile("sample.tmpl")
-
-	tmpl, err := template.New("package").Parse(string(buf))
-	if err != nil {
-		panic(err)
-	}
-	err = tmpl.Execute(os.Stdout, package_temp)
-	if err != nil {
-		panic(err)
-	}
-
 }

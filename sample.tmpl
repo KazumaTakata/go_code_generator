@@ -1,5 +1,14 @@
 package {{.Name}}
 
+{{if .Imports}}
+import (
+{{range $index, $import  := .Imports}}
+    "{{$import}}"
+
+{{end}}
+)
+{{end}}
+
 
 {{range $index, $element  := .Structs}}
     {{template "struct" $element}}
@@ -59,7 +68,7 @@ if {{.BoolExpression.Left}}=={{.BoolExpression.Right}} {
 
 
 {{define "call"}}
-{{.Name}}({{range $i, $arg := .Args}}{{$arg}},{{end}})     
+{{.Name}}({{range $i, $arg := .Args}}{{if $arg.IsString}}"{{$arg.Value}}"{{else}}{{$arg.Value}}{{end}},{{end}})     
 {{end}}
 
 {{define "assign"}}
