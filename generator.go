@@ -1,5 +1,13 @@
 package generator
 
+import (
+	"io"
+	"io/ioutil"
+	"path/filepath"
+	"runtime"
+	"text/template"
+)
+
 type Package struct {
 	Name      string
 	Imports   []string
@@ -56,4 +64,21 @@ type Struct struct {
 type StructElement struct {
 	Name string
 	Type string
+}
+
+func Execute(wr io.Writer, Package Package) {
+	_, filename, _, _ := runtime.Caller(0)
+	buf, err := ioutil.ReadFile(filepath.Join(filepath.Dir(filename), "sample.tmpl"))
+	if err != nil {
+		panic(err)
+	}
+	tmpl, err := template.New("package").Parse(string(buf))
+	if err != nil {
+		panic(err)
+	}
+
+	err = tmpl.Execute(wr, Package)
+	if err != nil {
+		panic(err)
+	}
 }
